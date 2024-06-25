@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bildirim Gönderme</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        button {
+            padding: 20px 40px;
+            font-size: 18px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #message {
+            margin-top: 20px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="notifyButton">Bildirim Gönder</button>
+        <p id="message"></p>
+    </div>
+    <script>
+        document.getElementById('notifyButton').addEventListener('click', function() {
+            if ('Notification' in window) {
+                if (Notification.permission === 'default' || Notification.permission === 'denied') {
+                    Notification.requestPermission().then(function(permission) {
+                        if (permission === 'granted') {
+                            showNotification();
+                        } else {
+                            showMessage('Bildirim izni verilmedi.');
+                        }
+                    });
+                } else if (Notification.permission === 'granted') {
+                    showNotification();
+                } else {
+                    showMessage('Bildirim izni verilmedi.');
+                }
+            } else {
+                showMessage('Tarayıcınız bildirimleri desteklemiyor.');
+            }
+        });
+
+        function showNotification() {
+            const notificationOptions = {
+                body: 'Bu bir tarayıcı bildirimidir!',
+                icon: 'notification-icon.png' // Bildirim simgesi isteğe bağlıdır
+            };
+            new Notification('Bildirim Başlığı', notificationOptions);
+            showMessage('Bildirim gönderildi.');
+        }
+
+        function showMessage(message) {
+            document.getElementById('message').textContent = message;
+        }
+    </script>
+</body>
+</html>
